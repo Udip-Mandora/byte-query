@@ -1,7 +1,8 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/bun-sql";
-import * as schema from "./schema";
-import { SQL } from "bun";
+import { neon, neonConfig } from '@neondatabase/serverless';
 
-const client = new SQL(process.env.DATABASE_URL!);
-export const db = drizzle({ client,schema:schema });
+import ws from 'ws';
+neonConfig.webSocketConstructor = ws;
+
+const sql = neon(process.env.DATABASE_URL!);
