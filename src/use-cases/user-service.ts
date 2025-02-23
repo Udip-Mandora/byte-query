@@ -1,4 +1,4 @@
-import { usersGetOneByUserName, usersCreateOne } from "@/data-access/users";
+import { usersCreateOne, usersGetOneByEmail } from "@/data-access/users";
 
 /**
  * Creates a new user is doesnt exist
@@ -8,8 +8,8 @@ import { usersGetOneByUserName, usersCreateOne } from "@/data-access/users";
  * @return {void} 
  * 
  */ 
-export async function createNewUserIfDoesntExist(data: { userName: string, email: string, firstName: string, lastName: string }) {
-    const user = await usersGetOneByUserName(data.userName);
+export async function createNewUserIfDoesntExist(data: { email: string, firstName: string, lastName: string }) {
+    const user = await usersGetOneByEmail(data.email);
     if (!user) {
         const id = await usersCreateOne(data);
         if(!id)
