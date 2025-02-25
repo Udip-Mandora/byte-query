@@ -15,6 +15,13 @@
       "when": 1740280541161,
       "tag": "0001_wonderful_liz_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740450175229,
+      "tag": "0002_massive_dreaming_celestial",
+      "breakpoints": true
     }
   ]
 }

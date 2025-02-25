@@ -18,10 +18,11 @@ export const UserTable = pgTable("users", {
 });
 export const QuestionTable = pgTable("questions", {
   id: uuid("id").primaryKey().defaultRandom(),
-  content: text("content"),
+  content: text("content").notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
   userId: uuid("user_id")
     .notNull()
-    .references(() => UserTable.id),
+    .references(() => UserTable.id).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
