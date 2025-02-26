@@ -45,3 +45,10 @@ export async function tagsCreateOne(data: { name: string, description: string })
     const [tag] = await db.insert(TagTable).values(data).returning({ id: TagTable.id })
     return tag;
 }
+
+/**
+ * Retrive a tag from the database
+ * @param {string} id of the tag
+ * 
+ * @returns A tag object or undefined
+ */

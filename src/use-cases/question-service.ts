@@ -1,22 +1,34 @@
+import { db } from "@/drizzle/db";
+import { QuestionTable } from "@/drizzle/schema";
+import { eq } from "drizzle-orm";
 /**
  * gets all the questions irrespective of who posted it .
  *
  * @returns a list of all questions.
  */
-export function getAllQuestions(): Promise<
+export async function getAllQuestions(): Promise<
   {
     id: string;
     title: string;
     content: string;
-    upVotes: number | string;
-    downVotes: number | string;
-    noOfAnswers: number | string;
-    tags: [string];
-    userName: string;
-    date: Date;
+    createdAt: Date;
+    updatedAt: Date;
   }[]
 > {
-  return;
+  try {
+    const data = await db.select().from(QuestionTable);
+    const questions = data.map((q) => ({
+      id: q.id,
+      title: q.title,
+      content: q.content,
+      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
+      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
+    }));
+    return questions;
+  } catch (error) {
+    console.error("Error Fetching Question: ", error);
+    return [];
+  }
 }
 
 /**
@@ -26,20 +38,29 @@ export function getAllQuestions(): Promise<
  *
  * @returns a list of all questions posted by a user.
  */
-export function getAllQuestionsByUser(userId: string): Promise<
+export async function getAllQuestionsByUser(userId: string): Promise<
   {
     id: string;
     title: string;
     content: string;
-    upVotes: number | string;
-    downVotes: number | string;
-    noOfAnswers: number | string;
-    tags: [string];
-    userName: string;
-    date: Date;
+    createdAt: Date;
+    updatedAt: Date;
   }[]
 > {
-  return;
+  try {
+    const result = await db.select().from(QuestionTable).where(eq(QuestionTable.userId, userId));
+    const questions = result.map((q) => ({
+      id: q.id,
+      title: q.title,
+      content: q.content,
+      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
+      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
+    }));
+    return questions;
+  } catch (error) {
+    console.error("Error Fetching Question: ", error);
+    return [];
+  }
 }
 
 /**
@@ -47,18 +68,29 @@ export function getAllQuestionsByUser(userId: string): Promise<
  *
  * @returns a list of all questions posted by current user.
  */
-export function getAllQuestionsByCurrentUser(userId: string): Promise<
+export async function getAllQuestionsByCurrentUser(userId: string): Promise<
   {
     id: string;
     title: string;
     content: string;
-    upVotes: number | string;
-    downVotes: number | string;
-    noOfAnswers: number | string;
-    tags: [string];
-    userName: string;
-    date: Date;
+    createdAt: Date;
+    updatedAt: Date;
   }[]
 > {
-  return;
+  if (!userId) {
+    throw new Error("User ID is required to fetch questions");
+  }
+  try {
+    const result = await db.select().from(QuestionTable).where(eq(QuestionTable.userId, userId));
+    return result.map((q) => ({
+      id: q.id,
+      title: q.title,
+      content: q.content,
+      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
+      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
+    }));
+  } catch (error) {
+    console.error("Error fetching current User's Questions: ", error);
+    return [];
+  }
 }
