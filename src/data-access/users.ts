@@ -68,3 +68,19 @@ export async function usersCreateOne(data: { email: string, firstName: string, l
     const [user] = await db.insert(UserTable).values(data).returning({ id: UserTable.id })
     return user;
 }
+
+/**
+ * Get all users from database.
+ * 
+ * @returns all users from database
+ */
+export async function usersGetAll(): Promise<{
+    id: string;
+    userName: string | null;
+    firstName: string;
+    lastName: string;
+    email: string;
+}[]> {
+    const users = await db.query.UserTable.findMany();
+    return users;
+}

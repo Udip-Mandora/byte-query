@@ -70,3 +70,20 @@ export async function answerCreateOne(data: { content: string, userId: string, q
     const [answer] = await db.insert(AnswerTable).values(data).returning({ id: AnswerTable.id })
     return answer;
 }
+
+/**
+ * Get all answers from db
+ * 
+ * @return all answers from db
+ */
+export async function answersGetAll(): Promise<{
+    id: string;
+    content: string | null;
+    userId: string;
+    questionId: string;
+    upVote: number;
+    downVote: number;
+}[]> {
+    const answers = await db.query.AnswerTable.findMany();
+    return answers;
+}

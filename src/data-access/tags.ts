@@ -47,8 +47,15 @@ export async function tagsCreateOne(data: { name: string, description: string })
 }
 
 /**
- * Retrive a tag from the database
- * @param {string} id of the tag
+ * Retrive all tag from the database
  * 
- * @returns A tag object or undefined
+ * @returns All tags from database.
  */
+export async function tagGetAll(): Promise<{
+    id: string;
+    name: string | null;
+    description: string | null;
+}[]> {
+    const tags = await db.query.TagTable.findMany();
+    return tags;
+}
