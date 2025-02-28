@@ -1,3 +1,4 @@
+import { questionsGetAll } from "@/data-access/questions";
 import { db } from "@/drizzle/db";
 import { QuestionTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -11,19 +12,12 @@ export async function getAllQuestions(): Promise<
     id: string;
     title: string;
     content: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   }[]
 > {
   try {
-    const data = await db.select().from(QuestionTable);
-    const questions = data.map((q) => ({
-      id: q.id,
-      title: q.title,
-      content: q.content,
-      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
-      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
-    }));
+    const questions = await questionsGetAll();
     return questions;
   } catch (error) {
     console.error("Error Fetching Question: ", error);
@@ -48,7 +42,10 @@ export async function getAllQuestionsByUser(userId: string): Promise<
   }[]
 > {
   try {
-    const result = await db.select().from(QuestionTable).where(eq(QuestionTable.userId, userId));
+    const result = await db
+      .select()
+      .from(QuestionTable)
+      .where(eq(QuestionTable.userId, userId));
     const questions = result.map((q) => ({
       id: q.id,
       title: q.title,
@@ -81,7 +78,10 @@ export async function getAllQuestionsByCurrentUser(userId: string): Promise<
     throw new Error("User ID is required to fetch questions");
   }
   try {
-    const result = await db.select().from(QuestionTable).where(eq(QuestionTable.userId, userId));
+    const result = await db
+      .select()
+      .from(QuestionTable)
+      .where(eq(QuestionTable.userId, userId));
     return result.map((q) => ({
       id: q.id,
       title: q.title,

@@ -62,3 +62,22 @@ export async function questionCreateOne(data: {
     .returning({ id: QuestionTable.id });
   return question;
 }
+
+/**
+ * Get all question from db
+ *
+ * @returns all question from db
+ * */
+export async function questionsGetAll(): Promise<
+  {
+    id: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    content: string;
+    title: string;
+    userId: string;
+  }[]
+> {
+  const questions = await db.query.QuestionTable.findMany();
+  return questions;
+}
