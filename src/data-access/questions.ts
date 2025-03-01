@@ -10,12 +10,12 @@ import { eq } from "drizzle-orm";
  */
 export async function quesionGetOneById(id: string): Promise<
   | {
-      id: string;
-      content: string | null;
-      userId: string;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }
+    id: string;
+    content: string | null;
+    userId: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }
   | undefined
 > {
   const question = await db.query.QuestionTable.findFirst({
@@ -32,12 +32,12 @@ export async function quesionGetOneById(id: string): Promise<
  */
 export async function questionGetByOneUserId(userId: string): Promise<
   | {
-      id: string;
-      content: string | null;
-      userId: string;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }
+    id: string;
+    content: string | null;
+    userId: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }
   | undefined
 > {
   const question = await db.query.QuestionTable.findFirst({
@@ -68,7 +68,7 @@ export async function questionCreateOne(data: {
  *
  * @returns all question from db
  * */
-export async function questionsGetAll(): Promise<
+export async function questionsGetAll(id: string): Promise<
   {
     id: string;
     createdAt: Date | null;

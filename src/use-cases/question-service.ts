@@ -1,28 +1,12 @@
-import { questionsGetAll } from "@/data-access/questions";
-import { db } from "@/drizzle/db";
-import { QuestionTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { questionsGetAll, questionGetByOneUserId } from "@/data-access/questions";
 /**
  * gets all the questions irrespective of who posted it .
  *
  * @returns a list of all questions.
  */
-export async function getAllQuestions(): Promise<
-  {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }[]
-> {
-  try {
-    const questions = await questionsGetAll();
-    return questions;
-  } catch (error) {
-    console.error("Error Fetching Question: ", error);
-    return [];
-  }
+export async function getAllQuestions(id?: string) {
+  const question = await questionsGetAll(id as string);
+  return question;
 }
 
 /**
@@ -32,32 +16,9 @@ export async function getAllQuestions(): Promise<
  *
  * @returns a list of all questions posted by a user.
  */
-export async function getAllQuestionsByUser(userId: string): Promise<
-  {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }[]
-> {
-  try {
-    const result = await db
-      .select()
-      .from(QuestionTable)
-      .where(eq(QuestionTable.userId, userId));
-    const questions = result.map((q) => ({
-      id: q.id,
-      title: q.title,
-      content: q.content,
-      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
-      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
-    }));
-    return questions;
-  } catch (error) {
-    console.error("Error Fetching Question: ", error);
-    return [];
-  }
+export async function getAllQuestionsByUser(userId: string) {
+  const question = await questionGetByOneUserId(userId);
+  return question;
 }
 
 /**
@@ -65,32 +26,10 @@ export async function getAllQuestionsByUser(userId: string): Promise<
  *
  * @returns a list of all questions posted by current user.
  */
-export async function getAllQuestionsByCurrentUser(userId: string): Promise<
-  {
-    id: string;
-    title: string;
-    content: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }[]
-> {
+export async function getAllQuestionsByCurrentUser(userId: string) {
   if (!userId) {
-    throw new Error("User ID is required to fetch questions");
+    throw new Error("User ID Required");
   }
-  try {
-    const result = await db
-      .select()
-      .from(QuestionTable)
-      .where(eq(QuestionTable.userId, userId));
-    return result.map((q) => ({
-      id: q.id,
-      title: q.title,
-      content: q.content,
-      createdAt: q.createdAt ? new Date(q.createdAt) : new Date(),
-      updatedAt: q.updatedAt ? new Date(q.updatedAt) : new Date(),
-    }));
-  } catch (error) {
-    console.error("Error fetching current User's Questions: ", error);
-    return [];
-  }
+  const question = await questionsGetAll(userId);
+  return question;
 }
