@@ -1,11 +1,16 @@
-import { questionsGetAll, questionGetByOneUserId } from "@/data-access/questions";
+import {
+  questionsGetAll,
+  questionGetAllByUserId,
+} from "@/data-access/questions";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { getCurrentUser } from "./user-service";
 /**
  * gets all the questions irrespective of who posted it .
  *
  * @returns a list of all questions.
  */
-export async function getAllQuestions(id?: string) {
-  const question = await questionsGetAll(id as string);
+export async function getAllQuestions() {
+  const question = await questionsGetAll();
   return question;
 }
 
@@ -17,7 +22,7 @@ export async function getAllQuestions(id?: string) {
  * @returns a list of all questions posted by a user.
  */
 export async function getAllQuestionsByUser(userId: string) {
-  const question = await questionGetByOneUserId(userId);
+  const question = await questionGetAllByUserId(userId);
   return question;
 }
 
@@ -26,10 +31,13 @@ export async function getAllQuestionsByUser(userId: string) {
  *
  * @returns a list of all questions posted by current user.
  */
-export async function getAllQuestionsByCurrentUser(userId: string) {
-  if (!userId) {
-    throw new Error("User ID Required");
+export async function getAllQuestionsByCurrentUser() {
+  try {
+    const user = await getCurrentUser();
+    const question = await getAllQuestionsByUser(user.id);
+    return question;
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
-  const question = await questionsGetAll(userId);
-  return question;
 }

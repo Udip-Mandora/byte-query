@@ -30,17 +30,17 @@ export async function quesionGetOneById(id: string): Promise<
  *
  * @returns Question object or undefined
  */
-export async function questionGetByOneUserId(userId: string): Promise<
+export async function questionGetAllByUserId(userId: string): Promise<
   | {
     id: string;
     content: string | null;
     userId: string;
     createdAt: Date | null;
     updatedAt: Date | null;
-  }
+  }[]
   | undefined
 > {
-  const question = await db.query.QuestionTable.findFirst({
+  const question = await db.query.QuestionTable.findMany({
     where: eq(QuestionTable.userId, userId),
   });
   return question;
@@ -68,7 +68,7 @@ export async function questionCreateOne(data: {
  *
  * @returns all question from db
  * */
-export async function questionsGetAll(id: string): Promise<
+export async function questionsGetAll(): Promise<
   {
     id: string;
     createdAt: Date | null;
