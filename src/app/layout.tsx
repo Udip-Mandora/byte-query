@@ -13,6 +13,8 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Byte Query",
@@ -24,16 +26,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { isAuthenticated, getUser } = getKindeServerSession();
-  const user = await getUser();
-
-  const isUserAuthenticated = await isAuthenticated();
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+  const user = await session?.user;
   return (
     <html lang="en">
       <body
         className={`min-h-sreen ${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
-        <SiteHeader isAuthenticated={isUserAuthenticated} user={user} />
+        <SiteHeader user={user} />
         {children}
       </body>
     </html>

@@ -3,11 +3,7 @@
 import { Button } from "./button";
 import Link from "next/link";
 import UserDropDown from "@/components/ui/user-dropdown";
-
-import {
-  LoginLink,
-  RegisterLink,
-} from "@kinde-oss/kinde-auth-nextjs/components";
+import { signIn } from "@/lib/auth-client";
 
 const mainNavLinks = [
   { text: "Link1", url: "#" },
@@ -16,11 +12,19 @@ const mainNavLinks = [
 ];
 
 export default function MainNav({
-  isAuthenticated,
   user,
 }: {
-  isAuthenticated: boolean;
-  user: any| null;
+  user:
+    | {
+        id: string;
+        name: string;
+        email: string;
+        emailVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        image?: string | null | undefined | undefined;
+      }
+    | undefined;
 }) {
   return (
     <div className="hidden gap-2 md:flex container mx-auto flex items-center justify-between">
@@ -39,22 +43,26 @@ export default function MainNav({
         ))}
       </div>
 
-      {isAuthenticated ? (
+      {user ? (
         <div className="flex items-center gap-x-1 mr-0 pr-0 r-0">
           <UserDropDown
             email={user?.email}
-            name={user?.given_name + " " + user?.family_name}
-            userImage={""}
+            name={user?.name || ""}
+            userImage={user?.image}
           />
         </div>
       ) : (
         <div className="flex items-center gap-x-1 mr-0 pr-0 r-0">
-          <LoginLink>
-            <Button variant="link">Login</Button>
-          </LoginLink>
-          <RegisterLink>
-            <Button variant="link">Signup</Button>
-          </RegisterLink>
+          <Button
+            variant="link"
+            onClick={async () => {
+              await signIn.social({
+                provider: "github",
+              });
+            }}
+          >
+            Signup/Login
+          </Button>
         </div>
       )}
     </div>

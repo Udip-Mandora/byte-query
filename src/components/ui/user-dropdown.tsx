@@ -9,12 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { signOut } from "@/lib/auth-client";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 
 interface iAppProps {
   email: string | null | undefined;
   name: string | null | undefined;
-  userImage: string | undefined;
+  userImage: string | undefined | null;
 }
 
 export default function UserDropDown({ email, name, userImage }: iAppProps) {
@@ -24,7 +25,7 @@ export default function UserDropDown({ email, name, userImage }: iAppProps) {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
             <Avatar className="h-10 w-10">
-              <AvatarImage src={userImage} alt="User Image" />
+              {userImage && <AvatarImage src={userImage} alt="User Image" />}
               {name && name[0] && <AvatarFallback>{name[0]}</AvatarFallback>}
             </Avatar>
           </Button>
@@ -47,7 +48,14 @@ export default function UserDropDown({ email, name, userImage }: iAppProps) {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <LogoutLink>Log out</LogoutLink>
+            <Button
+              variant="link"
+              onClick={async () => {
+                await signOut();
+              }}
+            >
+              Logout
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
