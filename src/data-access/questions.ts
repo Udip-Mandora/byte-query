@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/db";
-import { QuestionTable } from "@/drizzle/schema";
+import { QuestionTable, UserTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
 /**
@@ -10,12 +10,12 @@ import { eq } from "drizzle-orm";
  */
 export async function quesionGetOneById(id: string): Promise<
   | {
-    id: string;
-    content: string | null;
-    userId: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }
+      id: string;
+      content: string | null;
+      userId: string;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+    }
   | undefined
 > {
   const question = await db.query.QuestionTable.findFirst({
@@ -32,12 +32,12 @@ export async function quesionGetOneById(id: string): Promise<
  */
 export async function questionGetAllByUserId(userId: string): Promise<
   | {
-    id: string;
-    content: string | null;
-    userId: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }[]
+      id: string;
+      content: string | null;
+      userId: string;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+    }[]
   | undefined
 > {
   const question = await db.query.QuestionTable.findMany({
@@ -79,5 +79,57 @@ export async function questionsGetAll(): Promise<
   }[]
 > {
   const questions = await db.query.QuestionTable.findMany();
+  return questions;
+}
+/**
+ * Get all question from db
+ *
+ * @returns all question from db with related fields
+ * */
+export async function questionsGetAllWithDetails(): Promise<
+  {
+    createdAt: Date | null;
+    updatedAt: Date | null;
+    id: string;
+    content: string;
+    title: string;
+    userId: string;
+    tags: {
+      tag: {
+        name: string;
+      };
+    }[];
+    asker: {
+      name: string;
+      image: string | null;
+    };
+  }[]
+> {
+  const questions = await db.query.QuestionTable.findMany({
+    with: {
+      asker: {
+        columns: {
+          name: true,
+          image:true,
+        },
+      },
+      tags: {
+        columns: {
+          id: false,
+          tagId: false,
+          questionId: false,
+          createdAt: false,
+          updatedAt: false,
+        },
+        with: {
+          tag: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
   return questions;
 }

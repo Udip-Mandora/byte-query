@@ -1,24 +1,39 @@
+import { Card, CardHeader, CardTitle } from "../ui/card";
 import QuestionCard from "./QuestionCard";
 
 /**
- * 
+ *
  * @param questions - a list of questions
- * 
- * */ 
+ *
+ * */
 export default function QuestionList({
   questions,
 }: {
   questions: {
+    createdAt: Date | null;
+    updatedAt: Date | null;
     id: string;
-    title: string;
     content: string;
-    upVotes: number | string;
-    downVotes: number | string;
-    noOfAnswers: number | string;
-    tags: [string];
-    userName: string;
-    date: Date;
+    title: string;
+    userId: string;
+    tags: {
+      tag: {
+        name: string;
+      };
+    }[];
+    asker: {
+      name: string;
+      image: string | null;
+    };
   }[];
 }) {
-    return <>Questions</>
+  return (
+    <div className="flex flex-col w-full mx-12 space-y-1">
+      {questions &&
+        questions.length > 0 &&
+        questions.map((question) => (
+          <QuestionCard key={question.id} question={question}/>
+        ))}
+    </div>
+  );
 }

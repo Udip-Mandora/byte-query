@@ -1,3 +1,4 @@
+import { Many, relations } from "drizzle-orm";
 import {
   pgTable,
   varchar,
@@ -44,7 +45,7 @@ export const AnswerTable = pgTable("answers", {
 });
 export const TagTable = pgTable("tags", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: varchar("name", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull().unique(),
   description: text("description"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -100,3 +101,30 @@ export const VerificationTable = pgTable("verifications", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+export const questionRelations = relations(QuestionTable, ({ one, many }) => ({
+  asker: one(UserTable, {
+    fields: [QuestionTable.userId],
+    references: [UserTable.id],
+  }),
+  tags: many(QuestionTagTable),
+  answers: many(AnswerTable),
+}));
+export const tagsRelations = relations(TagTable, ({ many }) => ({
+  questions: many(QuestionTagTable),
+}));
+export const questionTagsRelations = relations(QuestionTagTable, ({ one }) => ({
+  question: one(QuestionTable, {
+    fields: [QuestionTagTable.questionId],
+    references: [QuestionTable.id],
+  }),
+  tag: one(TagTable, {
+    fields: [QuestionTagTable.tagId],
+    references: [TagTable.id],
+  }),
+}));
+export const answerRelation = relations(AnswerTable, ({ one }) => ({
+  question: one(QuestionTable, {
+    fields: [AnswerTable.questionId],
+    references: [QuestionTable.id],
+  }),
+}));

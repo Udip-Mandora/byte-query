@@ -1,16 +1,17 @@
 import {
   questionsGetAll,
   questionGetAllByUserId,
+  questionsGetAllWithDetails,
 } from "@/data-access/questions";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { getCurrentUser } from "./user-service";
+import { tagGetAll } from "@/data-access/tags";
 /**
  * gets all the questions irrespective of who posted it .
  *
  * @returns a list of all questions.
  */
 export async function getAllQuestions() {
-  const question = await questionsGetAll();
+  const question = await questionsGetAllWithDetails();
   return question;
 }
 

@@ -29,6 +29,13 @@
       "when": 1740935200027,
       "tag": "0003_safe_crusher_hogan",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741051937486,
+      "tag": "0004_broken_midnight",
+      "breakpoints": true
     }
   ]
 }
