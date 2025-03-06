@@ -1,5 +1,5 @@
+"use service"
 import {
-  questionsGetAll,
   questionGetAllByUserId,
   questionsGetAllWithDetails,
   questionCreateOne,

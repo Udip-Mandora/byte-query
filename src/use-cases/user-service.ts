@@ -1,3 +1,4 @@
+"use server";
 import { usersGetOneByEmail } from "@/data-access/users";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
