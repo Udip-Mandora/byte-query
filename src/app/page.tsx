@@ -14,7 +14,7 @@ export default async function Home() {
       {user && user && user.name ? (
         <>
           <h1 className="mx-auto text-3xl font-bold">Hello {user.name} !</h1>
-          <h2 className="mx-auto text-xl font-bold">Welcome to Byte Query!</h2>
+          <h2 className="mx-auto text-xl font-bold">Welcome to Byte Query! </h2>
         </>
       ) : (
         <h1 className="mx-auto text-3xl font-bold">Welcome to Byte Query</h1>
