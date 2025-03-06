@@ -2,6 +2,7 @@ import {
   questionsGetAll,
   questionGetAllByUserId,
   questionsGetAllWithDetails,
+  questionCreateOne,
 } from "@/data-access/questions";
 import { getCurrentUser } from "./user-service";
 import { tagGetAll } from "@/data-access/tags";
@@ -37,6 +38,33 @@ export async function getAllQuestionsByCurrentUser() {
     const user = await getCurrentUser();
     const question = await getAllQuestionsByUser(user.id);
     return question;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+
+/**
+ * Creates a new question 
+ * 
+ * @param {string} content content of the question
+ * @param {string} title title of the question
+ * 
+ * @returns id of the new question
+ * */ 
+export async function createNewQuestion(
+  content: string,
+  title: string
+): Promise<{ id: string }> {
+  try {
+    const user = await getCurrentUser();
+    const newQuestionID = questionCreateOne({
+      content: content,
+      title: title,
+      userId: user.id,
+    });
+    return newQuestionID;
   } catch (error) {
     console.error(error);
     throw error;

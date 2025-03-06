@@ -7,7 +7,7 @@ import Link from "next/link";
 import UserDropDown from "@/components/ui/user-dropdown";
 import { signIn } from "@/lib/auth-client";
 const mobileItems = [
-  { text: "Link1", url: "#" },
+  { text: "Got a question?", url: "/new-question" },
   { text: "Link2", url: "#" },
   { text: "Link3", url: "#" },
 ];

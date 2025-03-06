@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Badge } from "../ui/badge";
+import { Key } from "react";
 
 /**
  * Displays a question in a formatted card .
@@ -25,7 +26,6 @@ import { Badge } from "../ui/badge";
  * */
 export default function QuestionCard({
   question,
-  key,
 }: {
   question: {
     createdAt: Date | null;
@@ -44,11 +44,9 @@ export default function QuestionCard({
       image: string | null;
     };
   };
-  key: string;
 }) {
-  console.log(question.asker.image);
   return (
-    <Card key={key}>
+    <Card>
       <CardHeader>
         <CardTitle>{question.title}</CardTitle>
         <CardDescription>{question.content}</CardDescription>
