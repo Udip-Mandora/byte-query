@@ -1,19 +1,26 @@
+
+import { redirect } from "next/navigation";
 import { QuestionFormData } from "./form";
 import { createNewQuestion } from "@/use-cases/question-service";
+import {z} from "zod";
+import { questionSchema } from "./form";
 
 export async function createQuestion(data: QuestionFormData) {
-    // validate data 
-    if (!data.title || !data.description) {
-        throw new Error("Title and content are required.");
+  // validate data
+   // Validate using Zod
+   const parsed = questionSchema.safeParse(data);
+   if (!parsed.success) {
+     return { error: parsed.error.format() }; // Return structured validation errors
+   }
+  // pass that data to this function\
+  try {
+    const result = await createNewQuestion(data.title, data.description);
+    if (result.id) {
+        return { redirectUrl: "/" };
     }
-
-    // pass that data to this function\
-    try {
-        const result = await createNewQuestion(data.title, data.description);
-        return result;
-    } catch (error) {
-        // handle error here
-        console.error("Error creating question: ", error);
-        throw new Error("Failed to create question");
-    }
+  } catch (error) {
+    // handle error here
+    console.error("Error creating question: ", error);
+    // throw new Error("Failed to create question");
+  }
 }
