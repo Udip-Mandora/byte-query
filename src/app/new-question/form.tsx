@@ -5,6 +5,8 @@ import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { createQuestion } from "./action";
+import { useRouter } from "next/navigation";
 
 export type QuestionFormData = {
   title: string;
@@ -24,7 +26,7 @@ interface AnswerQuestionFormProps {
   onSubmit: (data: AnswerFormData) => void;
 }
 
-const questionSchema = z.object({
+export const questionSchema = z.object({
   title: z.string().min(10, "Title must be at least 10 characters"),
   description: z.string().min(20, "Description must be at least 20 characters"),
   tags: z.string().optional(),
@@ -34,17 +36,31 @@ const answerSchema = z.object({
   answer: z.string().min(10, "Answer must be at least 10 characters"),
 });
 
-export function AskQuestionForm({ onSubmit }: AskQuestionFormProps) {
+export function AskQuestionForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<QuestionFormData>({
     resolver: zodResolver(questionSchema),
   });
+  const onSubmit = async (formData:QuestionFormData) => {
+    const result = await createQuestion(formData);
+
+    if (result && result.error) {
+      Object.entries(result.error).forEach(([key, value]) => {
+        const errorMessage = Array.isArray(value) ? value.join(", ") : value._errors.join(", ");
+        setError(key as keyof QuestionFormData, { type: "manual", message: errorMessage });
+      });
+    } else if (result && result.redirectUrl) {
+      router.push(result.redirectUrl); // ✅ Redirect on client
+    }
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" method="POST">
       <Input placeholder="Title" {...register("title")} />
       {errors.title && <p className="text-red-500">{errors.title.message}</p>}
 
