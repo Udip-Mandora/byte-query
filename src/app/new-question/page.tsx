@@ -12,17 +12,4 @@ export default function Page() {
   );
 }
 
-export function Answer() {
-  const MyComponent = () => {
-    const handleSubmit = (data: { answer: string }) => {
-      // handle the answer submission here
-      console.log("Answer submitted:", data.answer);
-    };
 
-    return (
-      <div>
-        <AnswerForm onSubmit={handleSubmit} />
-      </div>
-    );
-  };
-}

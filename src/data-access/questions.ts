@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { db } from "@/drizzle/db";
 import { QuestionTable, UserTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
@@ -53,8 +53,8 @@ export async function questionGetAllByUserId(userId: string): Promise<
  *
  */
 export async function questionCreateOne(data: {
-  content: string;
   title: string;
+  content: string;
   userId: string;
 }): Promise<{ id: string }> {
   const [question] = await db
@@ -111,7 +111,7 @@ export async function questionsGetAllWithDetails(): Promise<
       asker: {
         columns: {
           name: true,
-          image:true,
+          image: true,
         },
       },
       tags: {
@@ -133,4 +133,55 @@ export async function questionsGetAllWithDetails(): Promise<
     },
   });
   return questions;
+}
+/**
+ * Get all question from db
+ *
+ * @returns all question from db with related fields
+ * */
+export async function questionsGetOneWithDetailsById(id: string): Promise<{
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  id: string;
+  content: string;
+  title: string;
+  userId: string;
+  tags: {
+      tag: {
+          name: string;
+      };
+  }[];
+  asker: {
+      name: string;
+      image: string | null;
+  };
+} | undefined> {
+  const question = await db.query.QuestionTable.findFirst({
+    where: eq(QuestionTable.id, id),
+    with: {
+      asker: {
+        columns: {
+          name: true,
+          image: true,
+        },
+      },
+      tags: {
+        columns: {
+          id: false,
+          tagId: false,
+          questionId: false,
+          createdAt: false,
+          updatedAt: false,
+        },
+        with: {
+          tag: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  return question;
 }
