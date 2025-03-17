@@ -1,8 +1,9 @@
-"use service"
+"use service";
 import {
   questionGetAllByUserId,
   questionsGetAllWithDetails,
   questionCreateOne,
+  questionsGetOneWithDetailsById,
 } from "@/data-access/questions";
 import { getCurrentUser } from "./user-service";
 import { tagGetAll } from "@/data-access/tags";
@@ -44,24 +45,23 @@ export async function getAllQuestionsByCurrentUser() {
   }
 }
 
-
 /**
- * Creates a new question 
- * 
+ * Creates a new question
+ *
  * @param {string} content content of the question
  * @param {string} title title of the question
- * 
+ *
  * @returns id of the new question
- * */ 
+ * */
 export async function createNewQuestion(
+  title: string,
   content: string,
-  title: string
 ): Promise<{ id: string }> {
   try {
     const user = await getCurrentUser();
     const newQuestionID = questionCreateOne({
-      content: content,
       title: title,
+      content: content,
       userId: user.id,
     });
     return newQuestionID;
@@ -69,4 +69,28 @@ export async function createNewQuestion(
     console.error(error);
     throw error;
   }
+}
+
+export async function getQuestionById(id: string): Promise<{
+  createdAt: Date | null;
+  updatedAt: Date | null;
+  id: string;
+  content: string;
+  title: string;
+  userId: string;
+  tags: {
+    tag: {
+      name: string;
+    };
+  }[];
+  asker: {
+    name: string;
+    image: string | null;
+  };
+}> {
+  const question = await questionsGetOneWithDetailsById(id);
+  if (!question) {
+    throw new Error("Question not found");
+  }
+  return question;
 }

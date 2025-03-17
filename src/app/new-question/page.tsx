@@ -12,6 +12,7 @@ export default function Page() {
   );
 }
 
+<<<<<<< HEAD
 // export function Answer() {
 //   const MyComponent = () => {
 //     const handleSubmit = (data: { answer: string }) => {
@@ -26,3 +27,6 @@ export default function Page() {
 //     );
 //   };
 // }
+=======
+
+>>>>>>> 13e127677c561615431478b810ef838fc3141c2b

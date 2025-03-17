@@ -10,6 +10,7 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Key } from "react";
+import Link from "next/link";
 
 /**
  * Displays a question in a formatted card .
@@ -48,7 +49,9 @@ export default function QuestionCard({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{question.title}</CardTitle>
+        <Link href={`/questions/${question.id}`}>
+          <CardTitle>{question.title}</CardTitle>
+        </Link>
         <CardDescription>{question.content}</CardDescription>
         <CardContent></CardContent>
         <CardFooter className="flex flex-col space-y-1 w-full">
