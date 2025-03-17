@@ -1,50 +1,37 @@
-"use client";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+"use server";
+
+import { db } from "@/drizzle/db";
+import { AnswerTable } from "@/drizzle/schema";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const answerSchema = z.object({
-    answer: z.string().min(10, "Answer must be at least 10 characters"),
+    content: z.string().min(10, "Answer must be at least 10 characters"),
+    userId: z.string(),
+    questionId: z.string(),
 });
 
-export function AnswerForm({ onSubmit }: { onSubmit: (data: { answer: string }) => void }) {
-    const {
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm<{ answer: string }>({
-        resolver: zodResolver(answerSchema),
+export async function submitAnswer(formData: FormData) {
+    const data = {
+        content: formData.get("content") as string,
+        userId: formData.get("userId") as string,
+        questionId: formData.get("questionId") as string,
+    };
+
+    const parsedData = answerSchema.safeParse(data);
+    if (!parsedData.success) {
+        return { error: parsedData.error.format() };
+    }
+
+    await db.insert(AnswerTable).values({
+        content: parsedData.data.content,
+        userId: parsedData.data.userId,
+        questionId: parsedData.data.questionId,
+        upVote: 0,
+        downVote: 0,
     });
 
-    const editor = useEditor({
-        extensions: [StarterKit],
-        content: "",
-        onUpdate: ({ editor }) => {
-            setValue("answer", editor.getHTML());
-        },
-    });
+    revalidatePath("/questions/" + parsedData.data.questionId);
 
-    return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            {!editor ? (
-                <p>Loading editor...</p>
-            ) : (
-                <>
-                    <div>
-                        <label className="block text-sm font-medium">Your Answer</label>
-                        <div className="border p-2 rounded-md">
-                            <EditorContent editor={editor} className="min-h-[150px]" />
-                        </div>
-                        {errors.answer && <p className="text-red-500 text-sm">{errors.answer.message}</p>}
-                    </div>
-                    <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        Post Answer
-                    </Button>
-                </>
-            )}
-        </form>
-    );
+    return { success: "Answer submitted successfully" };
 }
