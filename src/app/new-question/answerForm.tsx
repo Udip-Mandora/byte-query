@@ -5,7 +5,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { submitAnswer } from "@/app/new-question/action-answer";
+import { submitAnswer } from "@/app/questions/[id]/AnswerQuestion/action-answer";
 
 const answerSchema = z.object({
     content: z.string().min(10, "Answer must be at least 10 characters"),
