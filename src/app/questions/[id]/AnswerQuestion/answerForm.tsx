@@ -5,7 +5,8 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { submitAnswer } from "@/app/questions/[id]/AnswerQuestion/action-answer";
+import { submitAnswer } from "./action-answer";
+
 
 const answerSchema = z.object({
     content: z.string().min(10, "Answer must be at least 10 characters"),
@@ -35,7 +36,12 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
     });
 
     const onSubmit = async (data: { content: string }) => {
-        await submitAnswer({ content: data.content, questionId, userId });
+        const result= await submitAnswer({ content: data.content, questionId, userId });
+        console.log(result);
+        if(result.success)
+        {
+            location.reload();
+        }
     };
 
     return (
@@ -49,7 +55,7 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
                 </div>
             )}
             {errors.content && <p className="text-red-500 text-sm">{errors.content.message}</p>}
-            <Button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+            <Button type="submit" className="" variant={"default"} size={"sm"}>
                 Post Answer
             </Button>
         </form>
