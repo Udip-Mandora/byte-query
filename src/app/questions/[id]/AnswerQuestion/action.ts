@@ -1,9 +1,9 @@
 
 import { redirect } from "next/navigation";
-import { QuestionFormData } from "./form";
+import { QuestionFormData } from "../../../new-question/form";
 import { createNewQuestion } from "@/use-cases/question-service";
 import {z} from "zod";
-import { questionSchema } from "./form";
+import { questionSchema } from "../../../new-question/form";
 
 export async function createQuestion(data: QuestionFormData) {
   // validate data

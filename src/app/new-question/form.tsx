@@ -5,7 +5,7 @@ import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { createQuestion } from "./action";
+import { createQuestion } from "../questions/[id]/AnswerQuestion/action";
 import { useRouter } from "next/navigation";
 
 export type QuestionFormData = {
