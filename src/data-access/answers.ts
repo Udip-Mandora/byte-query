@@ -34,7 +34,7 @@ export async function answerGetOneById(id: string): Promise<
  *
  * @returns An answer object or undefined
  */
-export async function answerGetOneByQuestionId(questionId: string): Promise<
+export async function answerGetAllByQuestionId(questionId: string): Promise<
   | {
       id: string;
       content: string | null;
@@ -44,10 +44,10 @@ export async function answerGetOneByQuestionId(questionId: string): Promise<
       downVote: number;
       createdAt: Date | null;
       updatedAt: Date | null;
-    }
+    }[]
   | undefined
 > {
-  const answer = await db.query.AnswerTable.findFirst({
+  const answer = await db.query.AnswerTable.findMany({
     where: eq(AnswerTable.questionId, questionId),
   });
   return answer;
@@ -59,7 +59,7 @@ export async function answerGetOneByQuestionId(questionId: string): Promise<
  *
  * @returns An answer object or undefined
  */
-export async function answerGetOneByUserId(userId: string): Promise<
+export async function answerGetAllByUserId(userId: string): Promise<
   | {
       id: string;
       content: string | null;
@@ -69,10 +69,10 @@ export async function answerGetOneByUserId(userId: string): Promise<
       downVote: number;
       createdAt: Date | null;
       updatedAt: Date | null;
-    }
+    }[]
   | undefined
 > {
-  const answer = await db.query.AnswerTable.findFirst({
+  const answer = await db.query.AnswerTable.findMany({
     where: eq(AnswerTable.userId, userId),
   });
   return answer;
