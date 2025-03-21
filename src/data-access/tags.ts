@@ -11,12 +11,12 @@ import { and, eq } from "drizzle-orm";
  */
 export async function tagGetByOneId(id: string): Promise<
   | {
-      id: string;
-      name: string | null;
-      description: string | null;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }
+    id: string;
+    name: string | null;
+    description: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }
   | undefined
 > {
   const tag = await db.query.TagTable.findFirst({ where: eq(TagTable.id, id) });
@@ -31,12 +31,12 @@ export async function tagGetByOneId(id: string): Promise<
  */
 export async function tagGetByOneName(name: string): Promise<
   | {
-      id: string;
-      name: string | null;
-      description: string | null;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }
+    id: string;
+    name: string | null;
+    description: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }
   | undefined
 > {
   const tag = await db.query.TagTable.findFirst({
@@ -71,13 +71,15 @@ export async function tagGetAll(): Promise<
     id: string;
     name: string | null;
     description: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   }[]
 > {
   const tags = await db.query.TagTable.findMany();
   return tags;
 }
 /**
- * Retrive all tag from the database
+ * Retrive all tag from the database from question id
  *
  * @returns All tags from database.
  */
@@ -86,6 +88,8 @@ export async function tagGetAllByQuestionId(questionId: string): Promise<
     id: string;
     name: string | null;
     description: string | null;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   }[]
 > {
   const tags = await db.query.TagTable.findMany({
