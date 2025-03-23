@@ -12,6 +12,8 @@ const answerSchema = z.object({
     content: z.string().min(10, "Answer must be at least 10 characters"),
     questionId: z.string(),
     userId: z.string(),
+    upVote: z.number().optional(),
+    downVote: z.number().optional(),
 });
 
 export function AnswerForm({ questionId, userId }: { questionId: string; userId: string }) {
@@ -19,11 +21,15 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
         content: string;
         questionId: string;
         userId: string;
+        upVote: number;
+        downVote: number;
     }>({
         resolver: zodResolver(answerSchema),
         defaultValues: {
             questionId,
             userId,
+            upVote: 0,
+            downVote: 0,
         },
     });
 
@@ -36,10 +42,9 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
     });
 
     const onSubmit = async (data: { content: string }) => {
-        const result= await submitAnswer({ content: data.content, questionId, userId });
+        const result = await submitAnswer({ content: data.content, questionId, userId, upVote: 0, downVote: 1 });
         console.log(result);
-        if(result.success)
-        {
+        if (result.success) {
             location.reload();
         }
     };

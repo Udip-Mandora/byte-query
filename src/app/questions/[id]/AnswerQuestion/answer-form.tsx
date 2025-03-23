@@ -16,6 +16,8 @@ export async function submitAnswer(formData: FormData) {
         content: formData.get("content") as string,
         userId: formData.get("userId") as string,
         questionId: formData.get("questionId") as string,
+        upVote: formData.get("upVote") || 0,
+        downVote: formData.get("downVote") || 0,
     };
 
     const parsedData = answerSchema.safeParse(data);

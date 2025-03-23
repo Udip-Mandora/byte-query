@@ -7,10 +7,14 @@ export async function submitAnswer({
     content,
     questionId,
     userId,
+    upVote,
+    downVote,
 }: {
     content: string;
     questionId: string;
     userId: string;
+    upVote: number;
+    downVote: number;
 }) {
     try {
         const [answer] = await db
