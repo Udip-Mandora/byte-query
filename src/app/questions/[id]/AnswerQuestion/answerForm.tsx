@@ -21,16 +21,12 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
         content: string;
         questionId: string;
         userId: string;
-        upVote: number;
-        downVote: number;
     }>({
         resolver: zodResolver(answerSchema),
         defaultValues: {
             questionId,
             userId,
-            upVote: 0,
-            downVote: 0,
-        },
+        }
     });
 
     const editor = useEditor({
