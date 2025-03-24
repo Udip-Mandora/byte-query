@@ -1,4 +1,4 @@
-import { db } from "@/drizzle/db"; // Your database connection
+import { db } from "@/drizzle/db"; // database connection
 import { AnswerTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
