@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/drizzle/db";
 import { AnswerTable } from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 /**
  * Get an answer form database by id.
@@ -11,15 +11,15 @@ import { eq } from "drizzle-orm";
  */
 export async function answerGetOneById(id: string): Promise<
   | {
-      id: string;
-      content: string | null;
-      userId: string;
-      questionId: string;
-      upVote: number;
-      downVote: number;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }
+    id: string;
+    content: string | null;
+    userId: string;
+    questionId: string;
+    upVote: number;
+    downVote: number;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }
   | undefined
 > {
   const answer = await db.query.AnswerTable.findFirst({
@@ -36,15 +36,15 @@ export async function answerGetOneById(id: string): Promise<
  */
 export async function answerGetAllByQuestionId(questionId: string): Promise<
   | {
-      id: string;
-      content: string | null;
-      userId: string;
-      questionId: string;
-      upVote: number;
-      downVote: number;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }[]
+    id: string;
+    content: string | null;
+    userId: string;
+    questionId: string;
+    upVote: number;
+    downVote: number;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }[]
   | undefined
 > {
   const answer = await db.query.AnswerTable.findMany({
@@ -61,15 +61,15 @@ export async function answerGetAllByQuestionId(questionId: string): Promise<
  */
 export async function answerGetAllByUserId(userId: string): Promise<
   | {
-      id: string;
-      content: string | null;
-      userId: string;
-      questionId: string;
-      upVote: number;
-      downVote: number;
-      createdAt: Date | null;
-      updatedAt: Date | null;
-    }[]
+    id: string;
+    content: string | null;
+    userId: string;
+    questionId: string;
+    upVote: number;
+    downVote: number;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }[]
   | undefined
 > {
   const answer = await db.query.AnswerTable.findMany({
@@ -116,5 +116,40 @@ export async function answersGetAll(): Promise<
 }
 
 export async function answersGetCountByQuestionId(questionId: string) {
-    
+
+}
+
+
+//To update upVotes
+export async function updateVotes({
+  questionId,
+  upVote,
+}: {
+  questionId: string;
+  upVote: number;
+}) {
+  try {
+    const [votes] = await db.update(AnswerTable).set({ upVote: sql`${AnswerTable.upVote} + 1` }).where(eq(AnswerTable.questionId, questionId)).returning({ upVote: AnswerTable.upVote });
+    return [votes];
+  } catch (error) {
+    console.error("Error updating votes: ", error);
+    return Error;
+  }
+}
+
+//To update downVotes
+export async function updateDownVotes({
+  questionId,
+  downVote,
+}: {
+  questionId: string;
+  downVote: number;
+}) {
+  try {
+    const [votes] = await db.update(AnswerTable).set({ upVote: sql`${AnswerTable.downVote} + 1` }).where(eq(AnswerTable.questionId, questionId)).returning({ downVote: AnswerTable.downVote });
+    return [votes];
+  } catch (error) {
+    console.error("Error updating votes: ", error);
+    return Error;
+  }
 }

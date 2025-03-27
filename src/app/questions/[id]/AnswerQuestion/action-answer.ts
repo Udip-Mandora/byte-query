@@ -2,6 +2,7 @@
 
 import { db } from "@/drizzle/db";
 import { AnswerTable } from "@/drizzle/schema";
+import { eq, sql } from "drizzle-orm";
 
 export async function submitAnswer({
     content,
