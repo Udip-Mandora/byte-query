@@ -1,4 +1,5 @@
 import { answerGetAllByQuestionId, updateVotes, updateDownVotes } from "@/data-access/answers";
+import { string } from "better-auth";
 
 export async function getAllAnswers(questionId: string): Promise<
   {
@@ -30,9 +31,9 @@ export async function updateUpVotes(questionId: string): Promise<{
   downVote: number | 0;
 }[]> {
   try {
-    const votes = await updateVotes(questionId);
+    const [votes] = await updateVotes(questionId);
     if (!votes) {
-      throw new Error("VOtes are not updated");
+      throw new Error("Votes are not updated");
     }
     return votes;
   } catch (error) {
