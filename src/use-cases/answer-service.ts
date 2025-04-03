@@ -1,4 +1,8 @@
-import { answerGetAllByQuestionId, updateVotes, updateDownVotes } from "@/data-access/answers";
+import {
+  answerGetAllByQuestionId,
+  answersUpdateOneById,
+  updateDownVotes,
+} from "@/data-access/answers";
 import { string } from "better-auth";
 
 export async function getAllAnswers(questionId: string): Promise<
@@ -25,17 +29,22 @@ export async function getAllAnswers(questionId: string): Promise<
   }
 }
 
-export async function updateUpVotes(questionId: string): Promise<{
-  questionId: string;
+export async function updateUpVotes(
+  id: string,
+  upvotes: number
+): Promise<{
+  id: string;
   upVote: number | 0;
   downVote: number | 0;
-}[]> {
+}> {
   try {
-    const [votes] = await updateVotes(questionId);
-    if (!votes) {
-      throw new Error("Votes are not updated");
-    }
-    return votes;
+    const updatedAnswer = await answersUpdateOneById(id, { upVote: upvotes });
+    const result = {
+      id: updatedAnswer.id,
+      upVote: updatedAnswer.upVote,
+      downVote: updatedAnswer.downVote,
+    };
+    return result;
   } catch (error) {
     console.error(error);
     throw error;

@@ -25,6 +25,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.39.3",
+    "drizzle-zod": "^0.7.1",
     "lucide-react": "^0.475.0",
     "next": "15.2.0",
     "postgres": "^3.4.5",
@@ -35,7 +36,8 @@
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
     "tiptap": "^1.32.2",
-    "ws": "^8.18.0"
+    "ws": "^8.18.0",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
