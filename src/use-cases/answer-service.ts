@@ -1,7 +1,6 @@
 import {
   answerGetAllByQuestionId,
   answersUpdateOneById,
-  updateDownVotes,
 } from "@/data-access/answers";
 import { string } from "better-auth";
 
