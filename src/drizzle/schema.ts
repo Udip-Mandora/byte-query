@@ -101,6 +101,20 @@ export const VerificationTable = pgTable("verifications", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+export const VotesTable = pgTable("votes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => UserTable.id, { onDelete: "cascade" }),
+  questionId: uuid("question_id")
+    .references(() => QuestionTable.id)
+    .notNull(),
+  answerId: uuid("answer_id").notNull().references(() => AnswerTable.id, { onDelete: "cascade" }),
+  upVote: boolean("upVote").notNull(),
+  downVote: boolean("downVote").notNull(),
+});
+
 export const questionRelations = relations(QuestionTable, ({ one, many }) => ({
   asker: one(UserTable, {
     fields: [QuestionTable.userId],
