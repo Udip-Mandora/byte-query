@@ -46,5 +46,8 @@ export async function updateVotes({
 }) {
     try {
         const [answer] = await answersUpdateOneById(upVote, downVote);
+    } catch (error) {
+        console.error("Error updating votes: ", error);
+        return { success: false, error: "Failed to update vote" }
     }
-}
+};
