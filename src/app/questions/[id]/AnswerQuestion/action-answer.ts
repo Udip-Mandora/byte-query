@@ -1,5 +1,6 @@
 "use server";
 
+import { answersUpdateOneById } from "@/data-access/answers";
 import { db } from "@/drizzle/db";
 import { AnswerTable } from "@/drizzle/schema";
 import { eq, sql } from "drizzle-orm";
@@ -36,3 +37,14 @@ export async function submitAnswer({
     }
 }
 
+export async function updateVotes({
+    upVote,
+    downVote,
+}: {
+    upVote: number,
+    downVote: number,
+}) {
+    try {
+        const [answer] = await answersUpdateOneById(upVote, downVote);
+    }
+}
