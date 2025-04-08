@@ -7,6 +7,7 @@ import {
   text,
   integer,
   boolean,
+  unique,
 } from "drizzle-orm/pg-core";
 
 export const UserTable = pgTable("users", {
@@ -110,7 +111,9 @@ export const VotesTable = pgTable("votes", {
   answerId: uuid("answer_id").notNull().references(() => AnswerTable.id, { onDelete: "cascade" }),
   upVote: boolean("upVote").notNull(),
   downVote: boolean("downVote").notNull(),
-});
+}, (votes) => ({
+  uniqueUserAnswerVote: unique().on(votes.userId, votes.answerId),
+}));
 
 export const questionRelations = relations(QuestionTable, ({ one, many }) => ({
   asker: one(UserTable, {
