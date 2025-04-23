@@ -5,6 +5,7 @@ import { AnswerTable } from "@/drizzle/schema";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
+
 const answerSchema = z.object({
     content: z.string().min(10, "Answer must be at least 10 characters"),
     userId: z.string(),

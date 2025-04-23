@@ -1,6 +1,10 @@
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
+import { voteOnAnswer } from "@/app/questions/[id]/AnswerQuestion/action";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function AnswerCard({
   answer,
@@ -14,7 +18,18 @@ export default function AnswerCard({
     createdAt: Date | null;
     updatedAt: Date | null;
   };
-}) {
+},
+) {
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const handleVote = (type: "up" | "down") => {
+    startTransition(() => {
+      voteOnAnswer(answer.id, type).then(() => {
+        router.refresh(); // re-fetch updated vote counts
+      });
+    });
+  };
   return (
     <Card className="flex flex-col gap-1 p-2">
       <CardContent>{answer.content}</CardContent>
@@ -22,11 +37,13 @@ export default function AnswerCard({
         <span className="flex items-center justify-between text-xs font-medium w-full">
           <span>{answer.createdAt?.toLocaleString()}</span>
           <span className="flex gap-1 items-center text-xs">
-            <Button className="" size={"sm"} variant={"ghost"}>
+            <Button className="" size={"sm"} variant={"ghost"} onClick={() => handleVote("up")}
+              disabled={isPending}>
               <ThumbsUp className="size-4" />
               {answer.upVote}
             </Button>
-            <Button className="" size={"sm"} variant={"ghost"}>
+            <Button className="" size={"sm"} variant={"ghost"} onClick={() => handleVote("down")}
+              disabled={isPending}>
               <ThumbsDown className="size-4" />
               {answer.downVote}
             </Button>
