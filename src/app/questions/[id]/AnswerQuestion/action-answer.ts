@@ -1,6 +1,6 @@
 "use server";
 
-import { answersUpdateOneById } from "@/data-access/answers";
+import { answersUpdateOneById, answerGetOneById } from "@/data-access/answers";
 import { db } from "@/drizzle/db";
 import { AnswerTable } from "@/drizzle/schema";
 import { eq, sql } from "drizzle-orm";
@@ -37,17 +37,42 @@ export async function submitAnswer({
     }
 }
 
+// export async function updateVotes({
+//     upVote,
+//     downVote,
+// }: {
+//     upVote: number,
+//     downVote: number,
+// }) {
+//     try {
+//         const [answer] = await answersUpdateOneById(upVote, downVote);
+//     } catch (error) {
+//         console.error("Error updating votes: ", error);
+//         return { success: false, error: "Failed to update vote" }
+//     }
+// };
+
 export async function updateVotes({
-    upVote,
-    downVote,
+    answerId,
+    type,
 }: {
-    upVote: number,
-    downVote: number,
+    answerId: string;
+    type: "up" | "down";
 }) {
     try {
-        const [answer] = await answersUpdateOneById(upVote, downVote);
+        const fieldToUpdate = type === "up" ? "upVote" : "downVote";
+
+        // Fetch current value (optional but safer)
+        const answer = await answerGetOneById(answerId);
+        const current = answer?.[fieldToUpdate] ?? 0;
+
+        const updatedAnswer = await answersUpdateOneById(answerId, {
+            [fieldToUpdate]: current + 1,
+        });
+
+        return { success: true, data: updatedAnswer };
     } catch (error) {
         console.error("Error updating votes: ", error);
-        return { success: false, error: "Failed to update vote" }
+        return { success: false, error: "Failed to update vote" };
     }
-};
+}
