@@ -5,7 +5,9 @@ import { Button } from "../ui/button";
 import { voteOnAnswer } from "@/app/questions/[id]/AnswerQuestion/action";
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-
+import { voteOnAnswerAction } from "@/use-cases/vote-serices";
+import { auth } from "@/lib/auth";
+import { useSession } from "@/lib/auth-client";
 
 export default function AnswerCard({
   answer,
@@ -23,14 +25,28 @@ export default function AnswerCard({
 ) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   const handleVote = (type: "up" | "down") => {
+    if (!userId) {
+      console.error("You must be logged in to vote.");
+      return;
+    }
+
     startTransition(() => {
-      voteOnAnswer(answer.id, type).then(() => {
-        router.refresh(); // re-fetch updated vote counts
+      voteOnAnswerAction({
+        answerId: answer.id,
+        userId,
+        voteType: type,
+      }).then(() => {
+        router.refresh(); //Refresh the UI with updated vote counts
+      }).catch((error) => {
+        console.error("Voting failed:", error);
       });
     });
   };
+
   return (
     <Card className="flex flex-col gap-1 p-2">
       <CardContent>{answer.content}</CardContent>
