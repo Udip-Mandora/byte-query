@@ -1,3 +1,4 @@
+"use client"
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
