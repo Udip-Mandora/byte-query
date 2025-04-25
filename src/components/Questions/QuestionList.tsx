@@ -28,7 +28,7 @@ export default function QuestionList({
   }[];
 }) {
   return (
-    <div className="flex flex-col w-full mx-12 space-y-4">
+    <div className="flex flex-col max-w-4xl w-full mx-auto gap-8">
       {questions &&
         questions.length > 0 &&
         questions.map((question) => (

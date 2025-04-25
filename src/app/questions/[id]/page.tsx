@@ -26,7 +26,7 @@ export default async function Page({
   const question = await getQuestionById(id);
   const answers = await getAllAnswers(question.id);
   return (
-    <div className="flex flex-col gap-2 w-full p-12">
+    <div className="flex flex-col gap-2 mx-auto max-w-7xl p-12">
       <QuestionCard question={question} />
       <AnswerList answers={answers} />
       <AnswerQuestion questionId={question.id} userId={user.id} />

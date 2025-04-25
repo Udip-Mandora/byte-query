@@ -10,7 +10,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "@/lib/auth-client";
-import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { IconQuestionMark } from "@tabler/icons-react";
+import { LogOut } from "lucide-react";
+import Link from "next/link";
 
 interface iAppProps {
   email: string | null | undefined;
@@ -23,39 +25,37 @@ export default function UserDropDown({ email, name, userImage }: iAppProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-            <Avatar className="h-10 w-10">
-              {userImage && <AvatarImage src={userImage} alt="User Image" />}
-              {name && name[0] && <AvatarFallback>{name[0]}</AvatarFallback>}
-            </Avatar>
-          </Button>
+          <Avatar className="size-7">
+            {userImage && <AvatarImage src={userImage} alt="User Image" />}
+            {name && name[0] && <AvatarFallback>{name[0]}</AvatarFallback>}
+          </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56" forceMount>
+        <DropdownMenuContent align="start" className="" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">{name}</p>
-              <p className="text-xs leading-none text-muted-foreground">
+              <span className="text-sm font-medium leading-none">{name}</span>
+              <span className="text-xs leading-none text-muted-foreground">
                 {email}
-              </p>
+              </span>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>test</DropdownMenuItem>
-            <DropdownMenuItem>test</DropdownMenuItem>
-            <DropdownMenuItem>test</DropdownMenuItem>
-            <DropdownMenuItem>test</DropdownMenuItem>
+            <Link href={"/#my-questions"}>
+              <DropdownMenuItem>
+                <IconQuestionMark /> My Questions
+              </DropdownMenuItem>
+            </Link>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Button
-              variant="link"
-              onClick={async () => {
-                await signOut();
-              }}
-            >
-              Logout
-            </Button>
+          <DropdownMenuItem
+            variant="destructive"
+            onClick={async () => {
+              await signOut();
+            }}
+          >
+            <LogOut />
+            Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

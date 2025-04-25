@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { SiteNavbar } from "@/components/ui/site-navbar";
 
 export const metadata: Metadata = {
   title: "Byte Query",
@@ -35,8 +36,11 @@ export default async function RootLayout({
       <body
         className={`min-h-sreen ${geistSans.variable} ${geistMono.variable} antialiased dark`}
       >
-        <SiteHeader user={user} />
-        {children}
+        {/* <SiteHeader user={user} /> */}
+        <main className="">
+          <SiteNavbar user={user}/>
+          {children}
+        </main>
       </body>
     </html>
   );
