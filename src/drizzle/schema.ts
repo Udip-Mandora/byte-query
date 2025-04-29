@@ -115,6 +115,19 @@ export const VotesTable = pgTable("votes", {
   uniqueUserAnswerVote: unique().on(votes.userId, votes.answerId),
 }));
 
+export const AnswerRepliesTable = pgTable("answer_replies", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => UserTable.id, { onDelete: "cascade" }),
+  answerId: uuid("answer_id")
+    .notNull()
+    .references(() => AnswerTable.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const questionRelations = relations(QuestionTable, ({ one, many }) => ({
   asker: one(UserTable, {
     fields: [QuestionTable.userId],
