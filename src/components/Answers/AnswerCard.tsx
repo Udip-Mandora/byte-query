@@ -68,5 +68,6 @@ export default function AnswerCard({
         </span>
       </CardFooter>
     </Card>
+
   );
 }
