@@ -66,6 +66,22 @@ export default function AnswerCard({
             </Button>
           </span>
         </span>
+
+        {/* Replies list */}
+        {replies.length > 0 && (
+          <div className="pl-3 border-l border-gray-200 dark:border-gray-700 space-y-2 mt-2">
+            {replies.map((reply) => (
+              <div key={reply.id} className="text-sm text-muted-foreground">
+                <p>{reply.content}</p>
+                <span className="text-xs">{new Date(reply.createdAt).toLocaleString()}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Reply form */}
+        <AnswerReplyForm answerId={answer.id} onSuccess={refreshReplies} />
+
       </CardFooter>
     </Card>
 
