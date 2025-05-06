@@ -13,6 +13,7 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import UserDropDown from "./user-dropdown";
+import { signIn } from "@/lib/auth-client";
 
 export function SiteNavbar({
   user,
@@ -50,7 +51,16 @@ export function SiteNavbar({
               userImage={user?.image}
             />
           ) : (
-            <NavbarButton variant="primary">Login/Signup</NavbarButton>
+            <NavbarButton
+              variant="primary"
+              onClick={async () => {
+                await signIn.social({
+                  provider: "github",
+                });
+              }}
+            >
+              Login/Signup
+            </NavbarButton>
           )}
         </div>
       </NavBody>
@@ -85,7 +95,12 @@ export function SiteNavbar({
             </div>
             <div className="flex w-full flex-row gap-4">
               <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={async () => {
+                  setIsMobileMenuOpen(false);
+                  await signIn.social({
+                    provider: "github",
+                  });
+                }}
                 variant="primary"
                 className="w-full"
               >

@@ -103,17 +103,23 @@ export const VerificationTable = pgTable("verifications", {
   updatedAt: timestamp("updated_at"),
 });
 
-export const VotesTable = pgTable("votes", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => UserTable.id, { onDelete: "cascade" }),
-  answerId: uuid("answer_id").notNull().references(() => AnswerTable.id, { onDelete: "cascade" }),
-  upVote: boolean("upVote").notNull(),
-  downVote: boolean("downVote").notNull(),
-}, (votes) => ({
-  uniqueUserAnswerVote: unique().on(votes.userId, votes.answerId),
-}));
+export const VotesTable = pgTable(
+  "votes",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => UserTable.id, { onDelete: "cascade" }),
+    answerId: uuid("answer_id")
+      .notNull()
+      .references(() => AnswerTable.id, { onDelete: "cascade" }),
+    upVote: boolean("upVote").notNull(),
+    downVote: boolean("downVote").notNull(),
+  },
+  (votes) => ({
+    uniqueUserAnswerVote: unique().on(votes.userId, votes.answerId),
+  })
+);
 
 export const AnswerRepliesTable = pgTable("answer_replies", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -149,9 +155,19 @@ export const questionTagsRelations = relations(QuestionTagTable, ({ one }) => ({
     references: [TagTable.id],
   }),
 }));
-export const answerRelation = relations(AnswerTable, ({ one }) => ({
+export const answerRelation = relations(AnswerTable, ({ one,many }) => ({
   question: one(QuestionTable, {
     fields: [AnswerTable.questionId],
     references: [QuestionTable.id],
   }),
+  replies: many(AnswerRepliesTable),
 }));
+export const answerRepliesRelation = relations(
+  AnswerRepliesTable,
+  ({ one }) => ({
+    answer: one(AnswerTable, {
+      fields: [AnswerRepliesTable.answerId],
+      references: [AnswerTable.id],
+    }),
+  })
+);

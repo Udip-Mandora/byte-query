@@ -2,7 +2,6 @@ import {
   answerGetAllByQuestionId,
   answersUpdateOneById,
 } from "@/data-access/answers";
-import { string } from "better-auth";
 
 export async function getAllAnswers(questionId: string): Promise<
   {
@@ -14,6 +13,14 @@ export async function getAllAnswers(questionId: string): Promise<
     downVote: number;
     createdAt: Date | null;
     updatedAt: Date | null;
+    replies: {
+      id: string;
+      userId: string;
+      answerId: string;
+      content: string;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+    }[];
   }[]
 > {
   try {

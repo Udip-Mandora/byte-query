@@ -13,15 +13,15 @@ import { z } from "zod";
  */
 export async function answerGetOneById(id: string): Promise<
   | {
-    id: string;
-    content: string | null;
-    userId: string;
-    questionId: string;
-    upVote: number;
-    downVote: number;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }
+      id: string;
+      content: string | null;
+      userId: string;
+      questionId: string;
+      upVote: number;
+      downVote: number;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+    }
   | undefined
 > {
   const answer = await db.query.AnswerTable.findFirst({
@@ -38,19 +38,30 @@ export async function answerGetOneById(id: string): Promise<
  */
 export async function answerGetAllByQuestionId(questionId: string): Promise<
   | {
-    id: string;
-    content: string | null;
-    userId: string;
-    questionId: string;
-    upVote: number;
-    downVote: number;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }[]
+      id: string;
+      content: string | null;
+      userId: string;
+      questionId: string;
+      upVote: number;
+      downVote: number;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+      replies: {
+        id: string;
+        userId: string;
+        answerId: string;
+        content: string;
+        createdAt: Date | null;
+        updatedAt: Date | null;
+      }[];
+    }[]
   | undefined
 > {
   const answer = await db.query.AnswerTable.findMany({
     where: eq(AnswerTable.questionId, questionId),
+    with: {
+      replies: true,
+    },
   });
   return answer;
 }
@@ -63,15 +74,15 @@ export async function answerGetAllByQuestionId(questionId: string): Promise<
  */
 export async function answerGetAllByUserId(userId: string): Promise<
   | {
-    id: string;
-    content: string | null;
-    userId: string;
-    questionId: string;
-    upVote: number;
-    downVote: number;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }[]
+      id: string;
+      content: string | null;
+      userId: string;
+      questionId: string;
+      upVote: number;
+      downVote: number;
+      createdAt: Date | null;
+      updatedAt: Date | null;
+    }[]
   | undefined
 > {
   const answer = await db.query.AnswerTable.findMany({
@@ -117,7 +128,7 @@ export async function answersGetAll(): Promise<
   return answers;
 }
 
-export async function answersGetCountByQuestionId(questionId: string) { }
+export async function answersGetCountByQuestionId(questionId: string) {}
 
 export async function answersUpdateOneById(
   id: string,
