@@ -40,3 +40,26 @@ export async function submitAnswerReply({
         return { success: false, error: "Failed to Submit Answer Reply" };
     }
 }
+
+export async function createAnswerReplyFunction({
+    userId,
+    answerId,
+    content
+}: {
+    userId: string;
+    answerId: string;
+    content: string;
+}) {
+    try {
+        const [answerReply] = await db
+            .insert(AnswerRepliesTable)
+            .values({ userId, answerId, content })
+            .returning({ id: AnswerRepliesTable.id });
+
+        return { success: true, id: answerReply.id };
+    } catch (error) {
+        console.error("Error Createing Answer Reply: ", error);
+        return { success: false, error: "Failed to Create Answer Reply" };
+    }
+
+}

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getAllAnswerReplies } from "@/use-cases/answer-reply-service";
 import { useSession } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { createAnswerReplyFunction } from "./action-answer-reply";
 
 export function AnswerReplyForm({
     answerId,
@@ -28,7 +29,7 @@ export function AnswerReplyForm({
         if (!reply.trim()) return;
 
         startTransition(() => {
-            createAnswerReplyAction({
+            createAnswerReplyFunction({
                 userId: session.user.id,
                 answerId,
                 content: reply.trim(),
