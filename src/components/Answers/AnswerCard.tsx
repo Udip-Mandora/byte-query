@@ -36,6 +36,9 @@ export default function AnswerCard({
   const [isPending, startTransition] = useTransition();
   const { data: session } = useSession();
   const userId = session?.user?.id;
+  const refreshReplies = () => {
+    router.refresh();
+  }
 
   const handleVote = (type: "up" | "down") => {
     if (!userId) {
@@ -95,7 +98,7 @@ export default function AnswerCard({
               <div key={reply.id} className="text-sm text-muted-foreground">
                 <p>{reply.content}</p>
                 <span className="text-xs">
-                  {new Date(reply.createdAt).toLocaleString()}
+                  {reply.createdAt ? new Date(reply.createdAt).toLocaleString() : "unknown"}
                 </span>
               </div>
             ))}
