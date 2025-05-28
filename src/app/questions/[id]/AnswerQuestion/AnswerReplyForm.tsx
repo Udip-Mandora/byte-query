@@ -51,7 +51,7 @@ export function AnswerReplyForm({
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
                 rows={2}
-                className="text-sm"
+                className="w-full text-sm"
                 disabled={isPending}
             />
             <div className="flex justify-end">

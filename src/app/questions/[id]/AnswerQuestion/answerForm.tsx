@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { submitAnswer } from "./action-answer";
+import Underline from '@tiptap/extension-underline'
+import BulletList from '@tiptap/extension-bullet-list'
 
 
 const answerSchema = z.object({
@@ -45,6 +47,7 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
         }
     };
 
+
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 border p-4 rounded-md">
             <h2 className="text-lg font-semibold">Your Answer</h2>
@@ -52,6 +55,18 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
                 <p>Loading editor...</p>
             ) : (
                 <div className="border p-2 rounded-md">
+                    <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().toggleBold().run()}
+                        className={editor.isActive('bold') ? 'bg-gray-200' : ''}>
+                        B
+                    </Button>
+                    <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().toggleItalic().run()}
+                        className={editor.isActive('italic') ? 'bg-gray-200' : ''}>
+                        I
+                    </Button>
+                    <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        className={editor.isActive('underline') ? 'bg-gray-200' : ''}>
+                        U
+                    </Button>
                     <EditorContent editor={editor} className="min-h-[150px]" />
                 </div>
             )}
