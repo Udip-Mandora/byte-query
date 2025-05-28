@@ -8,7 +8,7 @@ import StarterKit from "@tiptap/starter-kit";
 import { submitAnswer } from "./action-answer";
 import Underline from '@tiptap/extension-underline'
 import BulletList from '@tiptap/extension-bullet-list'
-
+import ListItem from '@tiptap/extension-list-item';
 
 const answerSchema = z.object({
     content: z.string().min(10, "Answer must be at least 10 characters"),
@@ -32,7 +32,7 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
     });
 
     const editor = useEditor({
-        extensions: [StarterKit, Underline, BulletList],
+        extensions: [StarterKit.configure({ bulletList: false, listItem: false }), BulletList, ListItem, Underline],
         content: "",
         onUpdate: ({ editor }) => {
             setValue("content", editor.getHTML());
@@ -68,17 +68,19 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
                         U
                     </Button>
                     <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().toggleBulletList().run()}
-                        className={editor.isActive('bulletlist') ? 'bg-gray-200' : ''}>
-                        BL
+                        className={editor.isActive('bulletList') ? 'bg-gray-200' : ''}>
+                        • List
                     </Button>
 
-                    <EditorContent editor={editor} className="min-h-[150px]" />
+                    <EditorContent editor={editor!} className="min-h-[150px]" />
                 </div>
             )}
+
             {errors.content && <p className="text-red-500 text-sm">{errors.content.message}</p>}
             <Button type="submit" className="" variant={"default"} size={"sm"}>
                 Post Answer
             </Button>
+
         </form>
     );
 }
