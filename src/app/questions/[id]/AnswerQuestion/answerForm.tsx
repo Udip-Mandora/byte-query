@@ -32,7 +32,7 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
     });
 
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [StarterKit, Underline, BulletList],
         content: "",
         onUpdate: ({ editor }) => {
             setValue("content", editor.getHTML());
@@ -67,6 +67,11 @@ export function AnswerForm({ questionId, userId }: { questionId: string; userId:
                         className={editor.isActive('underline') ? 'bg-gray-200' : ''}>
                         U
                     </Button>
+                    <Button type="button" size="sm" variant="outline" onClick={() => editor.chain().focus().toggleBulletList().run()}
+                        className={editor.isActive('bulletlist') ? 'bg-gray-200' : ''}>
+                        BL
+                    </Button>
+
                     <EditorContent editor={editor} className="min-h-[150px]" />
                 </div>
             )}

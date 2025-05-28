@@ -63,7 +63,9 @@ export default function AnswerCard({
 
   return (
     <Card className="flex flex-col gap-1 p-2">
-      <CardContent>{answer.content}</CardContent>
+      <CardContent>
+        <div className="prose dark:prose-invert" dangerouslySetInnerHTML={{ __html: answer.content ?? "" }}></div>
+      </CardContent>
       <CardFooter className="flex flex-col space-y-1 w-full">
         <span className="flex items-center justify-between text-xs font-medium w-full">
           <span>{answer.createdAt?.toLocaleString()}</span>
