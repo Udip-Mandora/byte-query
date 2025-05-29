@@ -144,3 +144,13 @@
     @apply bg-background text-foreground;
   }
 }
+/* For bullet list visibility */
+.editor-styled ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.editor-styled li {
+  margin-bottom: 0.25rem;
+}
