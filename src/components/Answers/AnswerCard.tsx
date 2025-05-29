@@ -95,7 +95,7 @@ export default function AnswerCard({
 
         {/* Replies list */}
         {answer.replies.length > 0 && (
-          <div className="pl-3 border-l border-gray-200 dark:border-gray-700 space-y-2 mt-2">
+          <div className="pl-2 border-2 border-gray-200 dark:border-gray-700 space-y-2 mt-2">
             {answer.replies.map((reply) => (
               <div key={reply.id} className="text-sm text-muted-foreground">
                 <p>{reply.content}</p>
