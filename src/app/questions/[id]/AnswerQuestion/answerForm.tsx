@@ -9,6 +9,9 @@ import { submitAnswer } from "./action-answer";
 import Underline from "@tiptap/extension-underline";
 import { Bold, Italic, List, UnderlineIcon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
+import CodeBlock from "@tiptap/extension-code-block";
+
 
 const answerSchema = z.object({
   content: z.string().min(10, "Answer must be at least 10 characters"),
@@ -46,8 +49,14 @@ export function AnswerForm({
       StarterKit.configure({
         bulletList: { keepMarks: true },
         orderedList: { keepMarks: true },
+        codeBlock: false,
       }),
       Underline,
+      CodeBlock.configure({
+        HTMLAttributes: {
+          class: 'bg-gray-900 text-white font-mono p-2 rounded-md overflow-x-auto',
+        },
+      }),
     ],
     content: "",
     onUpdate: ({ editor }) => {
@@ -110,6 +119,15 @@ export function AnswerForm({
             >
               <List className="h-4 w-4" />
             </Toggle>
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+              className={editor.isActive('codeBlock') ? 'bg-gray-200' : ''}
+            >
+              {"</>"}
+            </Button>
           </div>
           <EditorContent editor={editor} className="min-h-64 p-4" />
         </div>
