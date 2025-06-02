@@ -47,14 +47,13 @@ export default function QuestionCard({
   };
 }) {
   return (
-    <Card>
+    <Card className="max-w-4xl w-full">
       <CardHeader>
         <Link href={`/questions/${question.id}`}>
           <CardTitle>{question.title}</CardTitle>
         </Link>
-        <CardDescription>{question.content}</CardDescription>
-        <CardContent></CardContent>
-        <CardFooter className="flex flex-col space-y-1 w-full">
+        <CardDescription>{question.content.slice(0,150)}</CardDescription>
+        <CardFooter className="flex flex-col space-y-1 w-full px-0 pt-1">
           <span className="flex items-center justify-between text-sm font-medium w-full">
             <span>{question.createdAt?.toLocaleString()}</span>
             <span className="flex gap-1 items-center">

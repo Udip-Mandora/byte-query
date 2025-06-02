@@ -7,11 +7,9 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { submitAnswer } from "./action-answer";
 import Underline from "@tiptap/extension-underline";
-import { Bold, Italic, List, UnderlineIcon } from "lucide-react";
+import { Bold, Code, CodeXml, Italic, List, UnderlineIcon } from "lucide-react";
 import { Toggle } from "@/components/ui/toggle";
-import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import CodeBlock from "@tiptap/extension-code-block";
-
 
 const answerSchema = z.object({
   content: z.string().min(10, "Answer must be at least 10 characters"),
@@ -54,7 +52,8 @@ export function AnswerForm({
       Underline,
       CodeBlock.configure({
         HTMLAttributes: {
-          class: 'bg-gray-900 text-white font-mono p-2 rounded-md overflow-x-auto',
+          class:
+            "bg-card font-mono overflow-x-auto",
         },
       }),
     ],
@@ -81,34 +80,34 @@ export function AnswerForm({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 border p-4 rounded-md"
+      className="space-y-4 border p-4 rounded-xl bg-card"
     >
       <h2 className="text-lg font-semibold">Your Answer</h2>
       {!editor ? (
         <p>Loading editor...</p>
       ) : (
-        <div className="border rounded-md">
+        <div className="border rounded-md t">
           <div className="flex gap-2 items-center border-b p-2">
             <Toggle
               value="bold"
               aria-label="Toggle bold"
               onClick={() => editor.chain().focus().toggleBold().run()}
             >
-              <Bold className="h-4 w-4" />
+              <Bold />
             </Toggle>
             <Toggle
               value="italic"
               aria-label="Toggle italic"
               onClick={() => editor.chain().focus().toggleItalic().run()}
             >
-              <Italic className="h-4 w-4" />
+              <Italic />
             </Toggle>
             <Toggle
               value="strikethrough"
               aria-label="Toggle strikethrough"
               onClick={() => editor.chain().focus().toggleUnderline().run()}
             >
-              <UnderlineIcon className="h-4 w-4" />
+              <UnderlineIcon />
             </Toggle>
             <Toggle
               value="strikethrough"
@@ -117,17 +116,13 @@ export function AnswerForm({
                 editor?.chain().focus().toggleBulletList().run();
               }}
             >
-              <List className="h-4 w-4" />
+              <List />
             </Toggle>
-            <Button
-              type="button"
-              size="sm"
-              variant="outline"
+            <Toggle
               onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              className={editor.isActive('codeBlock') ? 'bg-gray-200' : ''}
             >
-              {"</>"}
-            </Button>
+              <CodeXml />
+            </Toggle>
           </div>
           <EditorContent editor={editor} className="min-h-64 p-4" />
         </div>
@@ -137,7 +132,7 @@ export function AnswerForm({
         <p className="text-red-500 text-sm">{errors.content.message}</p>
       )}
       <Button type="submit" className="" variant={"default"} size={"sm"}>
-        Post Answer
+        Post answer
       </Button>
     </form>
   );

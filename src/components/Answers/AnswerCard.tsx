@@ -1,6 +1,6 @@
 "use client";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { Card, CardContent, CardFooter } from "../ui/card";
+import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Button } from "../ui/button";
 import { voteOnAnswer } from "@/app/questions/[id]/AnswerQuestion/action";
 import { useTransition } from "react";
@@ -9,6 +9,12 @@ import { voteOnAnswerAction } from "@/use-cases/vote-serices";
 import { auth } from "@/lib/auth";
 import { useSession } from "@/lib/auth-client";
 import { AnswerReplyForm } from "@/app/questions/[id]/AnswerQuestion/AnswerReplyForm";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
 
 export default function AnswerCard({
   answer,
@@ -38,7 +44,7 @@ export default function AnswerCard({
   const userId = session?.user?.id;
   const refreshReplies = () => {
     router.refresh();
-  }
+  };
 
   const handleVote = (type: "up" | "down") => {
     if (!userId) {
@@ -63,8 +69,14 @@ export default function AnswerCard({
 
   return (
     <Card className="flex flex-col gap-1 p-2">
-      <CardContent>
-        <div className="prose dark:prose-invert" dangerouslySetInnerHTML={{ __html: answer.content ?? "" }}></div>
+      <CardHeader></CardHeader>
+      <CardContent className="text-md">
+        {answer.content && (
+          <div
+            className="text-md"
+            dangerouslySetInnerHTML={{ __html: answer.content }}
+          />
+        )}
       </CardContent>
       <CardFooter className="flex flex-col space-y-1 w-full">
         <span className="flex items-center justify-between text-xs font-medium w-full">
@@ -92,23 +104,41 @@ export default function AnswerCard({
             </Button>
           </span>
         </span>
-
-        {/* Replies list */}
-        {answer.replies.length > 0 && (
-          <div className="pl-2 border-2 border-gray-200 dark:border-gray-700 space-y-2 mt-2">
-            {answer.replies.map((reply) => (
-              <div key={reply.id} className="text-sm text-muted-foreground">
-                <p>{reply.content}</p>
-                <span className="text-xs">
-                  {reply.createdAt ? new Date(reply.createdAt).toLocaleString() : "unknown"}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Reply form */}
-        <AnswerReplyForm answerId={answer.id} onSuccess={refreshReplies} />
+        <Accordion type="multiple" className="w-full">
+          <AccordionItem value="answers">
+            <AccordionTrigger>{answer.replies.length} Replies</AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-4">
+              {/* Replies list */}
+              {answer.replies.length > 0 && (
+                <div className="space-y-2">
+                  {answer.replies.map((reply) => (
+                    <div
+                      key={reply.id}
+                      className="text-sm border rounded-lg p-4"
+                    >
+                      <p>{reply.content}</p>
+                      <span className="text-xs">
+                        {reply.createdAt
+                          ? new Date(reply.createdAt).toLocaleString()
+                          : "unknown"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="reply-form">
+            <AccordionTrigger>Write a Reply</AccordionTrigger>
+            <AccordionContent className="flex flex-col gap-4">
+              {/* Reply form */}
+              <AnswerReplyForm
+                answerId={answer.id}
+                onSuccess={refreshReplies}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </CardFooter>
     </Card>
   );

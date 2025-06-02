@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       dynamic: 30,
     },
   },
+  images: {
+    remotePatterns: [new URL('https://avatars.githubusercontent.com')],
+  },
 };
 
 export default nextConfig;

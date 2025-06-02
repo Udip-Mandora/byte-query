@@ -23,8 +23,8 @@ export default function AnswerList({
   }[];
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <span className="text-sm font-semibold">Answers:</span>
+    <div className="flex flex-col gap-4 w-full max-w-4xl mx-auto">
+      <span className="text-md font-semibold">{answers.length} Answers:</span>
       {answers &&
         answers.length > 0 &&
         answers.map((answer) => <AnswerCard key={answer.id} answer={answer} />)}

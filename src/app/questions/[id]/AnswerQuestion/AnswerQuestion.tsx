@@ -13,13 +13,13 @@ export default function AnswerQuestion({
   const [answerQuestion, setAnswerQuestion] = useState(false);
   const handleSubmit = async () => {};
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 mt-4">
       <Button
         onClick={() => {
           setAnswerQuestion((prev) => !prev);
         }}
-        size={"sm"}
-        className="flex max-w-32"
+        size={"lg"}
+        className="w-32 flex"
       >
         Add Answer
       </Button>
